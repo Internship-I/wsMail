@@ -6,7 +6,6 @@ toolchain go1.24.7
 
 require (
 	github.com/aiteung/atdb v0.1.7
-	github.com/aiteung/musik v0.0.5
 	github.com/gofiber/fiber/v2 v2.52.9
 	github.com/whatsauth/whatsauth v0.2.9
 	go.mau.fi/whatsmeow v0.0.0-20250930215512-38f9aaa3ba7c
@@ -18,6 +17,7 @@ require (
 	github.com/aiteung/atapi v0.0.16 // indirect
 	github.com/aiteung/atmessage v0.0.27 // indirect
 	github.com/aiteung/atmodel v0.0.4 // indirect
+	github.com/aiteung/musik v0.0.5 // indirect
 	github.com/andybalholm/brotli v1.1.0 // indirect
 	github.com/beeper/argo-go v1.1.2 // indirect
 	github.com/elliotchance/orderedmap/v3 v3.1.0 // indirect
