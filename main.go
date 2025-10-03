@@ -30,16 +30,15 @@ import (
 
 func main() {
     // Ambil connection string dari env
-    mongoURI := os.Getenv("MONGO_URI")
-    if mongoURI == "" {
-        log.Fatal("MONGO_URI not set")
+    mongoSTRING := os.Getenv("MONGOSTRING")
+    if mongoSTRING == "" {
+        log.Fatal("MONGOSTRING not set")
     }
 
-    // Connect MongoDB
-    clientOptions := options.Client().ApplyURI(mongoURI)
+     // Connect ke MongoDB dengan timeout
     ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
     defer cancel()
-    client, err := mongo.Connect(ctx, clientOptions)
+    client, err := mongo.Connect(ctx, options.Client().ApplyURI(mongoSTRING))
     if err != nil {
         log.Fatal("MongoDB connection error:", err)
     }
@@ -48,7 +47,7 @@ func main() {
         log.Fatal("MongoDB ping failed:", err)
     }
 
-    fmt.Println("Connected to MongoDB!")
+    log.Println("Connected to MongoDB!")
 
     // Simple HTTP server
     http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
