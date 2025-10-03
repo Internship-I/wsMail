@@ -6,10 +6,10 @@ toolchain go1.24.7
 
 require (
 	github.com/aiteung/atdb v0.1.7
+	github.com/aiteung/musik v0.0.5
 	github.com/gofiber/fiber/v2 v2.52.9
 	github.com/whatsauth/whatsauth v0.2.9
 	go.mau.fi/whatsmeow v0.0.0-20250930215512-38f9aaa3ba7c
-	go.mongodb.org/mongo-driver v1.17.0
 )
 
 require (
@@ -18,7 +18,6 @@ require (
 	github.com/aiteung/atapi v0.0.16 // indirect
 	github.com/aiteung/atmessage v0.0.27 // indirect
 	github.com/aiteung/atmodel v0.0.4 // indirect
-	github.com/aiteung/musik v0.0.5 // indirect
 	github.com/andybalholm/brotli v1.1.0 // indirect
 	github.com/beeper/argo-go v1.1.2 // indirect
 	github.com/elliotchance/orderedmap/v3 v3.1.0 // indirect
@@ -53,6 +52,7 @@ require (
 	github.com/youmark/pkcs8 v0.0.0-20240726163527-a2c0da244d78 // indirect
 	go.mau.fi/libsignal v0.2.0 // indirect
 	go.mau.fi/util v0.9.1 // indirect
+	go.mongodb.org/mongo-driver v1.17.0 // indirect
 	golang.org/x/crypto v0.42.0 // indirect
 	golang.org/x/exp v0.0.0-20250911091902-df9299821621 // indirect
 	golang.org/x/net v0.44.0 // indirect
