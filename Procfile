@@ -1,1 +1,1 @@
-web: ./wsMail
+web: go run main.go
