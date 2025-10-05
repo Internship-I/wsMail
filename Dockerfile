@@ -1,15 +1,16 @@
 FROM golang:latest as build
 
-WORKDIR /usr/src/app
+# Atur work directory
+WORKDIR /app
 
+# Copy semua file ke dalam container
 COPY . .
 
+# Download dependencies
+RUN go mod tidy
+
+# Build aplikasi
 RUN go build -o main .
 
-FROM debian:latest
-
-WORKDIR /usr/app
-
-COPY --from=build /usr/src/app/main .
-
-ENTRYPOINT [ "/usr/app/main" ]
+# Jalankan aplikasi
+CMD ["/app/main"]
