@@ -28,6 +28,17 @@ func handler(w http.ResponseWriter, r *http.Request) {
     fmt.Fprintln(w, "Hello, World!")
 }
 
+// @title TES SWAGGER MAIL APP
+// @version 1.0
+// @description This is a sample swagger for Fiber
+
+// @contact.name API Support
+// @contact.url https://github.com/Nidasakinaa
+// @contact.email 714220040@std.ulbi.ac.id
+
+// @host https://mailbe-3edd125fb8b1.herokuapp.com
+// @BasePath /
+// @schemes https http
 func main() {
     // Ambil connection string dari env
     mongoSTRING := os.Getenv("MONGOSTRING")

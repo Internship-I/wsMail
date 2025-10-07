@@ -1,9 +1,10 @@
 package url
 
 import (
-	"github.com/Internship1/wsMail/controller"
-
+	"github.com/internship1/wsMail/controller"
+	"github.com/internship1/wsMail/handler"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/swagger"
 )
 
 func Web(page *fiber.App) {
@@ -18,4 +19,21 @@ func Web(page *fiber.App) {
 	page.Delete("/", controller.Sink)
 	page.Options("/", controller.Sink)
 
+	page.Get("/checkip", controller.Homepage)
+	page.Get("/transaction", controller.GetAllTransaction)
+	page.Post("/insertTransaction", controller.InsertDataTransaction)
+
+	page.Get("/user", controller.GetAllUser)
+	page.Get("/user/:id", controller.GetUserID)
+	page.Post("/insertUser", controller.InsertDataUser)
+	page.Put("/user/updateUser/:id", controller.UpdateDataUser)
+	page.Delete("/user/deleteUser/:id", controller.DeleteUserByID)
+	page.Post("/registeruser", handler.Register)
+	page.Post("/login", handler.Login)
+	page.Post("/loginCust", handler.CustomerLogin)
+
+	page.Get("/docs/*", swagger.HandlerDefault)
+
+	// page.Use(middleware.AuthMiddleware())
+	page.Get("/dashboard", handler.DashboardPage)
 }
