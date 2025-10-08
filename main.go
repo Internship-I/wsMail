@@ -1,9 +1,7 @@
 package main
 
 import (
-    "fmt"
 	"log"
-	"net/http"
 
 	// "go.mongodb.org/mongo-driver/mongo"
 	// "go.mongodb.org/mongo-driver/mongo/options"
@@ -14,9 +12,9 @@ import (
 	"github.com/aiteung/musik"
 )
 
-func handler(w http.ResponseWriter, r *http.Request) {
-    fmt.Fprintln(w, "Hello, World!")
-}
+// func handler(w http.ResponseWriter, r *http.Request) {
+//     fmt.Fprintln(w, "Hello, World!")
+// }
 
 // @title TES SWAGGER MAIL APP
 // @version 1.0
