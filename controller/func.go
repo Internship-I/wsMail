@@ -44,13 +44,17 @@ func GenerateConnote() string {
 func InsertDataTransaction(c *fiber.Ctx) error {
 	db := config.Ulbimongoconn
 	var transaction model.Transaction
+
+	// Parsing body JSON
 	if err := c.BodyParser(&transaction); err != nil {
-		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
-			"status":  http.StatusInternalServerError,
-			"message": err.Error(),
+		return c.Status(http.StatusBadRequest).JSON(fiber.Map{
+			"status":  http.StatusBadRequest,
+			"message": "Gagal parsing body JSON: " + err.Error(),
 		})
 	}
-	insertedID, err := cek.InsertTransaction(db, "MailApp",
+
+	// Insert data ke MongoDB
+	insertedID, connote, err := cek.InsertTransaction(db, "MailApp",
 		transaction.SenderName,
 		transaction.SenderPhone,
 		transaction.ReceiverName,
@@ -58,17 +62,25 @@ func InsertDataTransaction(c *fiber.Ctx) error {
 		transaction.ReceiverPhone,
 		transaction.ItemContent,
 		transaction.DeliveryStatus,
-		transaction.CODValue,)
+		transaction.CODValue,
+	)
+
 	if err != nil {
 		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
 			"status":  http.StatusInternalServerError,
-			"message": err.Error(),
+			"message": "Gagal menyimpan data: " + err.Error(),
 		})
 	}
+
+	// Log ke terminal/Heroku log
+	fmt.Printf("✅ Insert success! ID: %v | Connote: %s\n", insertedID, connote)
+
+	// Return response ke client
 	return c.Status(http.StatusOK).JSON(fiber.Map{
-		"status":      http.StatusOK,
-		"message":     "Data berhasil disimpan.",
-		"inserted_id": insertedID,
+		"status":       http.StatusOK,
+		"message":      "Data berhasil disimpan.",
+		"inserted_id":  insertedID,
+		"connote":      connote,
 	})
 }
 
@@ -143,32 +155,26 @@ func GetTransactionByConnote(c *fiber.Ctx) error {
 // @Failure 500
 // @Router /tarnsaction/{phoneNumber} [get]
 func GetTransactionByPhoneNumber(c *fiber.Ctx) error {
-	phoneNumber := c.Params("phoneNumber")
+	phoneNumber := c.Params("phoneNumber") // pakai Params agar bisa ambil dari path
 	if phoneNumber == "" {
 		return c.Status(http.StatusBadRequest).JSON(fiber.Map{
 			"status":  http.StatusBadRequest,
-			"message": "Parameter connote tidak boleh kosong",
+			"message": "Parameter 'phoneNumber' tidak boleh kosong",
 		})
 	}
 
-	transaction, err := cek.GetByPhoneNumber(phoneNumber, config.Ulbimongoconn, "MailApp")
+	transactions, err := cek.GetByPhoneNumber(phoneNumber, config.Ulbimongoconn, "MailApp")
 	if err != nil {
-		if errors.Is(err, mongo.ErrNoDocuments) {
-			return c.Status(http.StatusNotFound).JSON(fiber.Map{
-				"status":  http.StatusNotFound,
-				"message": fmt.Sprintf("Tidak ada data dengan nomor telepon %s", phoneNumber),
-			})
-		}
-		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
-			"status":  http.StatusInternalServerError,
-			"message": fmt.Sprintf("Gagal mengambil data untuk nomor telepon %s: %v", phoneNumber, err),
+		return c.Status(http.StatusNotFound).JSON(fiber.Map{
+			"status":  http.StatusNotFound,
+			"message": fmt.Sprintf("Tidak ditemukan transaksi dengan nomor telepon: %s", phoneNumber),
 		})
 	}
 
 	return c.Status(http.StatusOK).JSON(fiber.Map{
 		"status":  http.StatusOK,
-		"message": "Berhasil mengambil data transaksi",
-		"data":    transaction,
+		"message": fmt.Sprintf("Berhasil mengambil %d transaksi", len(transactions)),
+		"data":    transactions,
 	})
 }
 
@@ -186,32 +192,26 @@ func GetTransactionByPhoneNumber(c *fiber.Ctx) error {
 // @Failure 500
 // @Router /transaction/{address} [get]
 func GetTransactionByAddress(c *fiber.Ctx) error {
-	address := c.Params("address")
+	address := c.Params("address") // ambil dari path
 	if address == "" {
 		return c.Status(http.StatusBadRequest).JSON(fiber.Map{
 			"status":  http.StatusBadRequest,
-			"message": "Parameter address tidak boleh kosong",
+			"message": "Parameter 'address' tidak boleh kosong",
 		})
 	}
 
-	transaction, err := cek.GetByAddress(address, config.Ulbimongoconn, "MailApp")
+	transactions, err := cek.GetByAddress(address, config.Ulbimongoconn, "MailApp")
 	if err != nil {
-		if errors.Is(err, mongo.ErrNoDocuments) {
-			return c.Status(http.StatusNotFound).JSON(fiber.Map{
-				"status":  http.StatusNotFound,
-				"message": fmt.Sprintf("Tidak ada data dengan alamat %s", address),
-			})
-		}
-		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
-			"status":  http.StatusInternalServerError,
-			"message": fmt.Sprintf("Gagal mengambil data untuk alamat %s: %v", address, err),
+		return c.Status(http.StatusNotFound).JSON(fiber.Map{
+			"status":  http.StatusNotFound,
+			"message": fmt.Sprintf("Tidak ditemukan transaksi dengan alamat: %s", address),
 		})
 	}
 
 	return c.Status(http.StatusOK).JSON(fiber.Map{
 		"status":  http.StatusOK,
-		"message": "Berhasil mengambil data transaksi",
-		"data":    transaction,
+		"message": fmt.Sprintf("Berhasil mengambil %d transaksi", len(transactions)),
+		"data":    transactions,
 	})
 }
 

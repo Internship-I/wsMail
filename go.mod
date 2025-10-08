@@ -5,7 +5,7 @@ go 1.23.3
 require github.com/gofiber/fiber/v2 v2.52.9
 
 require (
-	github.com/Internship-I/backendmail v0.0.6
+	github.com/Internship-I/backendmail v0.0.9
 	github.com/aiteung/musik v0.0.5
 	go.mau.fi/whatsmeow v0.0.0-20230817083005-1c185f033d88
 	go.mongodb.org/mongo-driver v1.17.4

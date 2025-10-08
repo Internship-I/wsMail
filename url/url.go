@@ -22,9 +22,9 @@ func Web(page *fiber.App) {
 	page.Get("/checkip", controller.Homepage)
 	page.Get("/transaction", controller.GetAllTransaction)
 	page.Post("/insertTransaction", controller.InsertDataTransaction)
-	page.Get("/transaction/:connote", controller.GetTransactionByConnote)
-	page.Get("/transaction/:phoneNumber", controller.GetTransactionByPhoneNumber)
-	page.Get("/transaction/:address", controller.GetTransactionByAddress)
+	page.Get("/transactionConnote/:connote", controller.GetTransactionByConnote)
+	page.Get("/transactionPhone/:phoneNumber", controller.GetTransactionByPhoneNumber)
+	page.Get("/transactionAddress/:address", controller.GetTransactionByAddress)
 
 	page.Get("/user", controller.GetAllUser)
 	page.Get("/user/:id", controller.GetUserID)
