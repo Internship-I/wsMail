@@ -8,15 +8,15 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/internship1/wsMail/config"
+	"github.com/Internship-I/wsMail/config"
 	"github.com/aiteung/musik"
 	"github.com/gofiber/fiber/v2"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 
-	iniconfig "github.com/internship1/backendmail/config"
-	model "github.com/internship1/backendmail/model"
-	cek "github.com/internship1/backendmail/module"
+	iniconfig "github.com/Internship-I/backendmail/config"
+	model "github.com/Internship-I/backendmail/model"
+	cek "github.com/Internship-I/backendmail/module"
 )
 
 func Homepage(c *fiber.Ctx) error {
@@ -51,16 +51,14 @@ func InsertDataTransaction(c *fiber.Ctx) error {
 		})
 	}
 	insertedID, err := cek.InsertTransaction(db, "MailApp",
-		transaction.ConsignmentNote,
 		transaction.SenderName,
+		transaction.SenderPhone,
 		transaction.ReceiverName,
 		transaction.AddressReceiver,
 		transaction.ReceiverPhone,
 		transaction.ItemContent,
 		transaction.DeliveryStatus,
-		transaction.CODValue,
-		transaction.CreatedAt,
-		transaction.UpdatedAt)
+		transaction.CODValue,)
 	if err != nil {
 		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
 			"status":  http.StatusInternalServerError,
@@ -89,19 +87,18 @@ func GetAllTransaction(c *fiber.Ctx) error {
 	return c.JSON(ps)
 }
 
-// GetTransactionByConnote retrieves transactions by consignment note
-// GetMenuID godoc
-// @Summary Get By ID Data Menu.
-// @Description Ambil per ID data menu.
-// @Tags MenuItem
+// GetTransactionByConnote godoc
+// @Summary Get Transaction by Consignment Note
+// @Description Ambil data transaksi berdasarkan nomor consignment note
+// @Tags Transaction
 // @Accept json
 // @Produce json
-// @Param id path string true "Masukan ID"
-// @Success 200 {object} MenuItem
+// @Param connote path string true "Masukkan nomor consignment note"
+// @Success 200 {object} Transaction
 // @Failure 400
 // @Failure 404
 // @Failure 500
-// @Router /menu/{id} [get]
+// @Router /transaction/{connote} [get]
 func GetTransactionByConnote(c *fiber.Ctx) error {
 	connote := c.Params("connote")
 	if connote == "" {
@@ -111,17 +108,18 @@ func GetTransactionByConnote(c *fiber.Ctx) error {
 		})
 	}
 
-	transaction, err := cek.GetTransactionByConnote(config.Ulbimongoconn, "MailApp", connote)
+	transaction, err := cek.GetTransactionByConnote(connote, config.Ulbimongoconn, "MailApp")
 	if err != nil {
 		if errors.Is(err, mongo.ErrNoDocuments) {
 			return c.Status(http.StatusNotFound).JSON(fiber.Map{
 				"status":  http.StatusNotFound,
-				"message": fmt.Sprintf("Tidak ada data dengan connote %s", connote),
+				"message": fmt.Sprintf("Tidak ditemukan data dengan connote: %s", connote),
 			})
 		}
 		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
 			"status":  http.StatusInternalServerError,
-			"message": fmt.Sprintf("Gagal mengambil data untuk connote %s: %v", connote, err),
+			"message": fmt.Sprintf("Gagal mengambil data untuk connote %s", connote),
+			"error":   err.Error(),
 		})
 	}
 
@@ -154,7 +152,7 @@ func GetTransactionByPhoneNumber(c *fiber.Ctx) error {
 		})
 	}
 
-	transaction, err := cek.GetTransactionByPhoneNumber(config.Ulbimongoconn, "MailApp", phoneNumber)
+	transaction, err := cek.GetByPhoneNumber(phoneNumber, config.Ulbimongoconn, "MailApp")
 	if err != nil {
 		if errors.Is(err, mongo.ErrNoDocuments) {
 			return c.Status(http.StatusNotFound).JSON(fiber.Map{
@@ -197,7 +195,7 @@ func GetTransactionByAddress(c *fiber.Ctx) error {
 		})
 	}
 
-	transaction, err := cek.GetTransactionByConnote(config.Ulbimongoconn, "MailApp", address)
+	transaction, err := cek.GetByAddress(address, config.Ulbimongoconn, "MailApp")
 	if err != nil {
 		if errors.Is(err, mongo.ErrNoDocuments) {
 			return c.Status(http.StatusNotFound).JSON(fiber.Map{
@@ -313,19 +311,13 @@ func InsertDataUser(c *fiber.Ctx) error {
 	}
 	user.Password = hashedPassword
 
-	// Pastikan PersonalizedCategories tidak nil
-	if user.PersonalizedCategories == nil {
-		user.PersonalizedCategories = []string{}
-	}
-
 	// Insert ke database
 	insertedID, err := cek.InsertUser(db, "User",
 		user.FullName,
-		user.Phone,
+		user.PhoneNumber,
 		user.Username,
 		user.Password,
 		user.Role,
-		user.PersonalizedCategories, // Tidak perlu [] di sini
 	)
 	if err != nil {
 		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
@@ -387,7 +379,7 @@ func UpdateDataUser(c *fiber.Ctx) error {
 	err = cek.UpdateUser(context.Background(), db, "User",
 		objectID,
 		user.FullName,
-		user.Phone,
+		user.PhoneNumber,
 		user.Username,
 		user.Password,
 		user.Role)

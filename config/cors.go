@@ -19,7 +19,7 @@ var origins = []string{
 	"http://127.0.0.1:5500",
 	"http://127.0.0.1:8080",
 	// "https://internship1/"
-	"https://internship1.github.io",
+	"https://Internship-I.github.io",
 }
 
 var Internalhost string = os.Getenv("INTERNALHOST") + ":" + os.Getenv("PORT")

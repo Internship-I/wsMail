@@ -5,10 +5,10 @@ import (
 	"net/http"
 	"strings"
 
-	iniconfig "github.com/internship1/backendmail/config"
-	inimodel "github.com/internship1/backendmail/model"
-	cek "github.com/internship1/backendmail/module"
-	"github.com/internship1/wsMail/config"
+	iniconfig "github.com/Internship-I/backendmail/config"
+	inimodel "github.com/Internship-I/backendmail/model"
+	cek "github.com/Internship-I/backendmail/module"
+	"github.com/Internship-I/wsMail/config"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -190,7 +190,7 @@ func Register(c *fiber.Ctx) error {
     newAdmin.Password = hashedPassword
 
     // Simpan user baru ke database
-    insertedID, err := cek.InsertUser(config.Ulbimongoconn, "User", newAdmin.FullName, newAdmin.Phone, newAdmin.Username, newAdmin.Password, newAdmin.Role, newAdmin.PersonalizedCategories)
+    insertedID, err := cek.InsertUser(config.Ulbimongoconn, "User", newAdmin.FullName, newAdmin.PhoneNumber, newAdmin.Username, newAdmin.Password, newAdmin.Role)
     if err != nil {
         return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
             "status":  http.StatusInternalServerError,

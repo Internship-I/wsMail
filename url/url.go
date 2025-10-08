@@ -1,8 +1,8 @@
 package url
 
 import (
-	"github.com/internship1/wsMail/controller"
-	"github.com/internship1/wsMail/handler"
+	"github.com/Internship-I/wsMail/controller"
+	"github.com/Internship-I/wsMail/handler"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/swagger"
 )
@@ -22,6 +22,9 @@ func Web(page *fiber.App) {
 	page.Get("/checkip", controller.Homepage)
 	page.Get("/transaction", controller.GetAllTransaction)
 	page.Post("/insertTransaction", controller.InsertDataTransaction)
+	page.Get("/transaction/:connote", controller.GetTransactionByConnote)
+	page.Get("/transaction/:phoneNumber", controller.GetTransactionByPhoneNumber)
+	page.Get("/transaction/:address", controller.GetTransactionByAddress)
 
 	page.Get("/user", controller.GetAllUser)
 	page.Get("/user/:id", controller.GetUserID)
