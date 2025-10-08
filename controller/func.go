@@ -81,7 +81,6 @@ func InsertDataTransaction(c *fiber.Ctx) error {
 // @Success 200 {object} Transaction
 // @Router /transaction [get]
 // GetAllTransaction retrieves all transaction from the database
-// GetAllTransaction retrieves all transaction from the database
 func GetAllTransaction(c *fiber.Ctx) error {
 	ps := cek.GetAllTransaction(config.Ulbimongoconn, "MailApp")
 	return c.JSON(ps)
