@@ -42,6 +42,8 @@ func main() {
 	// Aktifkan CORS (bisa custom pakai config.Cors kalau sudah dibuat)
 	site.Use(cors.New())
 
+	config.InitConfig()
+
 	if config.MongoString == "" {
 		log.Println("[WARNING] MongoString kosong! Periksa environment variable Anda.")
 	} else {

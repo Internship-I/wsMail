@@ -14,11 +14,19 @@ var IteungIPAddress string = os.Getenv("ITEUNGBEV1")
 
 var MongoString string = os.Getenv("MONGOSTRING")
 
-func init() {
+var Ulbimongocon interface{}
+
+func InitConfig() {
+	IteungIPAddress = os.Getenv("ITEUNGBEV1")
+	MongoString = os.Getenv("MONGOSTRING")
 	if MongoString == "" {
 		fmt.Println("❌ MongoString is empty! Check your environment variable.")
 	} else {
 		fmt.Println("✅ MongoString detected:", MongoString)
+	}
+	DBUlbimongoinfo = atdb.DBInfo{
+		DBString: MongoString,
+		DBName:   "Internship1",
 	}
 }
 
