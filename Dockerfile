@@ -13,4 +13,4 @@ RUN go mod tidy
 RUN go build -o /main .
 
 # Jalankan aplikasi
-CMD ["/main"]
+CMD ["/app/main"]
