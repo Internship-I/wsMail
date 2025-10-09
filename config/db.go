@@ -3,6 +3,7 @@ package config
 import (
 	// "context"
 	// "log"
+	"fmt"
 	"os"
 
 	"github.com/aiteung/atdb"
@@ -12,6 +13,14 @@ import (
 var IteungIPAddress string = os.Getenv("ITEUNGBEV1")
 
 var MongoString string = os.Getenv("MONGOSTRING")
+
+func init() {
+	if MongoString == "" {
+		fmt.Println("❌ MongoString is empty! Check your environment variable.")
+	} else {
+		fmt.Println("✅ MongoString detected:", MongoString)
+	}
+}
 
 var DBUlbimongoinfo = atdb.DBInfo{
 	DBString: MongoString,
