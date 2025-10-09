@@ -2,14 +2,16 @@ package main
 
 import (
 	"log"
+	"os"
 
 	// "go.mongodb.org/mongo-driver/mongo"
 	// "go.mongodb.org/mongo-driver/mongo/options"
 	"github.com/Internship-I/wsMail/config"
-	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/Internship-I/wsMail/url"
+
+	// "github.com/aiteung/musik"
 	"github.com/gofiber/fiber/v2"
-	"github.com/aiteung/musik"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 )
 
 // func handler(w http.ResponseWriter, r *http.Request) {
@@ -28,9 +30,14 @@ import (
 // @BasePath /
 // @schemes https http
 func main() {
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "3000" // fallback untuk local
+	}
+
 	site := fiber.New(config.Iteung)
 	site.Use(cors.New(config.Cors))
 	url.Web(site)
 
-	log.Fatal(site.Listen(musik.Dangdut()))
+	log.Fatal(site.Listen(":" + port))
 }
