@@ -32,12 +32,25 @@ import (
 func main() {
 	port := os.Getenv("PORT")
 	if port == "" {
-		port = "3000" // fallback untuk local
+		port = "3000"
 	}
 
-	site := fiber.New(config.Iteung)
-	site.Use(cors.New(config.Cors))
+	// Buat instance Fiber
+	site := fiber.New()
+
+	// Aktifkan CORS (bisa custom pakai config.Cors kalau sudah dibuat)
+	site.Use(cors.New())
+
+	// Cek koneksi database
+	if config.Ulbimongoconn == nil {
+		log.Println("[WARNING] MongoDB belum terhubung.")
+	} else {
+		log.Println("[INFO] MongoDB aktif dan siap digunakan.")
+	}
+
+	// Load semua route
 	url.Web(site)
 
+	// Jalankan server
 	log.Fatal(site.Listen(":" + port))
 }
