@@ -1,1 +1,1 @@
-web: ./wsMail
+web: ./main
