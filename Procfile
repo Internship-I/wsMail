@@ -1,1 +1,1 @@
-web: ./bin/wsMail
+web: ./wsMail
